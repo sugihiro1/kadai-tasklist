@@ -2,7 +2,11 @@
 
 @section('content')
 
-    <h1>タスク 一覧</h1>
+    <div class="center jumbotron">
+        <div class="text-center">
+            <h1>タスクリスト</h1>
+        </div>
+    </div>
 
     @if (count($tasks) > 0)
         <table class="table table-striped">
