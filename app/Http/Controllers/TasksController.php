@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 
 use App\Task;
 
+use DB;
+
 class TasksController extends Controller
 {
     /**
@@ -15,8 +17,18 @@ class TasksController extends Controller
      */
     public function index()
     {
-        $tasks = Task::all();
+        if (\Auth::check()) {
+            $user = \Auth::user();
+            
+            /* $tasks = $user->tasks()->all(); */
+    
+            $user_id = $user->id;
+            $tasks = DB::select("SELECT * FROM tasks WHERE user_id = $user_id");  
 
+        } else {
+            $tasks = Task::all();
+        }
+        
         return view('tasks.index', [
             'tasks' => $tasks,
         ]);
@@ -48,7 +60,11 @@ class TasksController extends Controller
             'status' => 'required|max:10',
         ]);
         
+        
         $task = new Task;
+        
+        $user = \Auth::user();
+        $task->user_id = $user->id;
         $task->content = $request->content;
         $task->status = $request->status;
         $task->save();
@@ -102,6 +118,7 @@ class TasksController extends Controller
         ]);        
         
         $task = Task::find($id);
+
         $task->content = $request->content;
         $task->status = $request->status;
         $task->save();
