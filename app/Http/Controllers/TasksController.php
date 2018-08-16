@@ -17,11 +17,15 @@ class TasksController extends Controller
      */
     public function index()
     {
+        /*
+        $user = \Auth::user();
+        $tasks = $user->tasks()->all(); 
+        */
+        
+        
         if (\Auth::check()) {
             $user = \Auth::user();
-            
-            /* $tasks = $user->tasks()->all(); */
-    
+   
             $user_id = $user->id;
             $tasks = DB::select("SELECT * FROM tasks WHERE user_id = $user_id");  
 
@@ -32,7 +36,9 @@ class TasksController extends Controller
         return view('tasks.index', [
             'tasks' => $tasks,
         ]);
+        
     }
+    
 
     /**
      * Show the form for creating a new resource.
